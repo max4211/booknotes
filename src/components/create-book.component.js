@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 export default class CreateBook extends Component {
     constructor(props) {
@@ -21,10 +22,17 @@ export default class CreateBook extends Component {
 
     /* LIFE CYCLE METHOD IN REACT - RIGHT BEFORE THINGS IN PAGE DISPLAY */
     componentDidMount() {
-        this.setState({
-            // TODO - integrate with MongoDB
-            users: ['test user'],
-            username: 'test user'
+        axios.get('http://localhost:5000/users/')
+        .then(response => {
+          if (response.data.length > 0) {
+            this.setState({ 
+              users: response.data.map(user => user.username),
+              username: response.data[0].username
+            });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
         })
     }
 
@@ -67,6 +75,9 @@ export default class CreateBook extends Component {
         /* SUBMIT EXERCISE TO DATABASE */
         console.log(book);
 
+        axios.post('http://localhost:5000/books/add', book)
+            .then(res => console.log(res.data));
+
         /* TAKE PERSON BACK TO HOMEPAGE */
         window.location = '/';
 
@@ -84,6 +95,7 @@ export default class CreateBook extends Component {
                 className="form-control"
                 value={this.state.username}
                 onChange={this.onChangeUsername}>
+                    {/* JavaScript */}
                 {
                   this.state.users.map(function(user) {
                     return <option 
@@ -96,7 +108,7 @@ export default class CreateBook extends Component {
           </div>
           <div className="form-group"> 
             <label>Page: </label>
-            <input  type="text"
+            <input  type="number"
                 required
                 className="form-control"
                 value={this.state.page}
