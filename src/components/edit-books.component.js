@@ -83,7 +83,7 @@ export default class EditBooks extends Component {
         /* SUBMIT EXERCISE TO DATABASE */
         console.log(book);
 
-        axios.post('http://localhost:5000/books/update'+this.props.match.params.id, book)
+        axios.post('http://localhost:5000/books/update/'+this.props.match.params.id, book)
             .then(res => console.log(res.data));
 
         /* TAKE PERSON BACK TO HOMEPAGE */
